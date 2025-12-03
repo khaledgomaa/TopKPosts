@@ -2,6 +2,7 @@
   <Project Path="TopKPosts.ApiService/TopKPosts.ApiService.csproj" />
   <Project Path="TopKPosts.AppHost/TopKPosts.AppHost.csproj" />
   <Project Path="TopKPosts.Data/TopKPosts.Data.csproj" />
+  <Project Path="TopKPosts.Redis/TopKPosts.Redis.csproj" Id="e8560d9a-405d-4cbf-af8b-2d2d8a9c1591" />
   <Project Path="TopKPosts.ServiceDefaults/TopKPosts.ServiceDefaults.csproj" />
   <Project Path="TopKPosts.Web/TopKPosts.Web.csproj" />
 </Solution>

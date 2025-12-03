@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TopKPosts.Data\TopKPosts.Data.csproj" />
+    <ProjectReference Include="..\TopKPosts.Redis\TopKPosts.Redis.csproj" />
     <ProjectReference Include="..\TopKPosts.ServiceDefaults\TopKPosts.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="9.5.0" />
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.0.1" />
+    <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="13.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
   </ItemGroup>
 
 </Project>

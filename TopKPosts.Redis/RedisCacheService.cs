@@ -20,7 +20,7 @@ namespace TopKPosts.Redis
         /// <summary>
         /// Retrieve the top k posts by like count.
         /// </summary>
-        public async Task<IReadOnlyList<(string PostId, long Likes)>> GetTopPostsAsync(int k)
+        public async Task<IReadOnlyList<(int PostId, long Likes)>> GetTopPostsAsync(int k)
         {
             // Get top k posts with highest scores
             var entries = await _db.SortedSetRangeByRankWithScoresAsync(
@@ -29,10 +29,11 @@ namespace TopKPosts.Redis
                 stop: k - 1,
                 order: Order.Descending);
 
-            var result = new List<(string, long)>();
+            var result = new List<(int, long)>();
+
             foreach (var entry in entries)
             {
-                result.Add((entry.Element, (long)entry.Score));
+                result.Add(((int)entry.Element, (long)entry.Score));
             }
 
             return result;

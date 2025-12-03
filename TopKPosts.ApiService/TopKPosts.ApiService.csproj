@@ -57,11 +57,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TopKPosts.Data\TopKPosts.Data.csproj" />
+    <ProjectReference Include="..\TopKPosts.Redis\TopKPosts.Redis.csproj" />
     <ProjectReference Include="..\TopKPosts.ServiceDefaults\TopKPosts.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.0.1" />
+    <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="13.0.1" />
     <PackageReference Include="Bogus" Version="35.6.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">

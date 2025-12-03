@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using TopKPosts.Data;
 using TopKPosts.Redis;
-using TopKPosts.Web;
 using TopKPosts.Web.Components;
+using TopKPosts.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +14,17 @@ builder.AddRedisOutputCache("cache");
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
-    {
-        // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
-        // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
-        client.BaseAddress = new("https+http://apiservice");
-    });
+// Configure database
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("postsdb"));
+});
 
+builder.EnrichNpgsqlDbContext<AppDbContext>();
+
+// Register services
 builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
+builder.Services.AddScoped<TopPostsService>();
 
 var app = builder.Build();
 

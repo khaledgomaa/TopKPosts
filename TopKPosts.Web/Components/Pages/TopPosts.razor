@@ -1,0 +1,103 @@
+@page "/"
+@rendermode InteractiveServer
+@inject TopPostsService TopPostsService
+@implements IAsyncDisposable
+
+<PageTitle>Top 10 Posts</PageTitle>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Top 10 Posts by Likes</h1>
+        <div class="text-muted">
+            <small>Auto-refreshing every 10 seconds...</small>
+            <span class="badge bg-info ms-2">@lastRefreshTime</span>
+        </div>
+    </div>
+
+    @if (posts == null)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Loading top posts...</p>
+        </div>
+    }
+    else if (posts.Count == 0)
+    {
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">No posts found</h4>
+            <p>There are no posts with likes yet. Posts will appear here once they receive likes.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var post in posts)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title">@post.Title</h5>
+                                <span class="badge bg-danger">❤️ @post.Likes</span>
+                            </div>
+                            <p class="card-text text-muted">@post.Content</p>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar"></i> @post.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<PostWithLikes>? posts;
+    private string lastRefreshTime = "Never";
+    private System.Threading.Timer? refreshTimer;
+    private readonly TimeSpan refreshInterval = TimeSpan.FromSeconds(10);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPosts();
+        StartAutoRefresh();
+    }
+
+    private async Task LoadPosts()
+    {
+        try
+        {
+            posts = await TopPostsService.GetTopPostsAsync(10);
+            lastRefreshTime = DateTime.Now.ToString("HH:mm:ss");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            // In a real app, you'd want to log this and show an error message
+            Console.WriteLine($"Error loading posts: {ex.Message}");
+        }
+    }
+
+    private void StartAutoRefresh()
+    {
+        refreshTimer = new System.Threading.Timer(async _ =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await LoadPosts();
+            });
+        }, null, refreshInterval, refreshInterval);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (refreshTimer != null)
+        {
+            await refreshTimer.DisposeAsync();
+        }
+    }
+}
+
