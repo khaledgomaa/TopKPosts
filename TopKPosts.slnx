@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="TopKPosts.ApiService/TopKPosts.ApiService.csproj" />
+  <Project Path="TopKPosts.AppHost/TopKPosts.AppHost.csproj" />
+  <Project Path="TopKPosts.Data/TopKPosts.Data.csproj" />
+  <Project Path="TopKPosts.ServiceDefaults/TopKPosts.ServiceDefaults.csproj" />
+  <Project Path="TopKPosts.Web/TopKPosts.Web.csproj" />
+</Solution>
