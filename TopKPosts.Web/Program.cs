@@ -1,3 +1,4 @@
+using TopKPosts.Redis;
 using TopKPosts.Web;
 using TopKPosts.Web.Components;
 
@@ -17,6 +18,8 @@ builder.Services.AddHttpClient<WeatherApiClient>(client =>
         // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
         client.BaseAddress = new("https+http://apiservice");
     });
+
+builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
 
 var app = builder.Build();
 

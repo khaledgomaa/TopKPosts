@@ -8,7 +8,8 @@ var postsDb = postgres.AddDatabase("postsdb");
 
 var apiService = builder.AddProject<Projects.TopKPosts_ApiService>("apiservice")
     .WithHttpHealthCheck("/health")
-    .WithReference(postsDb);
+    .WithReference(postsDb)
+    .WithReference(cache);
 
 builder.AddProject<Projects.TopKPosts_Web>("webfrontend")
     .WithExternalHttpEndpoints()
