@@ -1,0 +1,6 @@
+@TopKPosts.Likes.Producer_HostAddress = http://localhost:5179
+
+GET {{TopKPosts.Likes.Producer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

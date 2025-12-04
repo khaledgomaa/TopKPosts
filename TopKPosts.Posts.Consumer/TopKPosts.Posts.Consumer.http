@@ -1,0 +1,6 @@
+@TopKPosts.Posts.Consumer_HostAddress = http://localhost:5298
+
+GET {{TopKPosts.Posts.Consumer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

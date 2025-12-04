@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TopKPosts.ApiService.Services;
+using TopKPosts.ApiService.Consumers;
 using TopKPosts.Data;
 using TopKPosts.Redis;
 
@@ -21,12 +21,23 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
 
 builder.EnrichNpgsqlDbContext<AppDbContext>();
 
-builder.Services.AddHostedService<PostsWorker>();
-builder.Services.AddHostedService<LikesWorker>();
+builder.Services.AddHostedService<LikesProducer>();
+//builder.Services.AddHostedService<PostsConsumer>();
+//builder.Services.AddHostedService<LikesConsumer>();
+builder.Services.AddHostedService<KafkaRouterConsumer>();
 
 builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
 
 builder.AddRedisOutputCache("cache");
+
+builder.AddKafkaProducer<string, string>("kafka");
+
+builder.AddKafkaConsumer<string, string>("kafka", configure =>
+{
+    configure.Config.GroupId = "consumer-id";
+    configure.Config.AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Latest;
+});
+
 
 var app = builder.Build();
 
@@ -45,8 +56,3 @@ dbContext.Database.Migrate();
 app.MapDefaultEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -11,14 +11,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TopKPosts.ApiService\TopKPosts.ApiService.csproj" />
+    <ProjectReference Include="..\TopKPosts.Likes.Consumer\TopKPosts.Likes.Consumer.csproj" />
+    <ProjectReference Include="..\TopKPosts.Likes.Producer\TopKPosts.Likes.Producer.csproj" />
+    <ProjectReference Include="..\TopKPosts.Posts.Consumer\TopKPosts.Posts.Consumer.csproj" />
+    <ProjectReference Include="..\TopKPosts.Posts.Producer\TopKPosts.Posts.Producer.csproj" />
+    <ProjectReference Include="..\TopKPosts.Ranking\TopKPosts.Ranking.csproj" />
     <ProjectReference Include="..\TopKPosts.Web\TopKPosts.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.0" />
-    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.5.0" />
-    <PackageReference Include="Aspire.Hosting.Redis" Version="9.5.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="13.0.2" />
+    <PackageReference Include="Aspire.Hosting.Kafka" Version="13.0.2" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.0.2" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="13.0.2" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,6 @@
+@TopKPosts.Ranking_HostAddress = http://localhost:5200
+
+GET {{TopKPosts.Ranking_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

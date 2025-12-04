@@ -62,6 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Confluent.Kafka" Version="13.0.2" />
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.0.1" />
     <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="13.0.1" />
     <PackageReference Include="Bogus" Version="35.6.5" />

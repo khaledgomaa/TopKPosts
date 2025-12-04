@@ -1,8 +1,24 @@
 <Solution>
-  <Project Path="TopKPosts.ApiService/TopKPosts.ApiService.csproj" />
+  <Folder Name="/Caching/">
+    <Project Path="TopKPosts.Redis/TopKPosts.Redis.csproj" Id="e8560d9a-405d-4cbf-af8b-2d2d8a9c1591" />
+  </Folder>
+  <Folder Name="/Consumers/">
+    <Project Path="TopKPosts.Likes.Consumer/TopKPosts.Likes.Consumer.csproj" />
+    <Project Path="TopKPosts.Posts.Consumer/TopKPosts.Posts.Consumer.csproj" />
+  </Folder>
+  <Folder Name="/Presistence/">
+    <Project Path="TopKPosts.Data/TopKPosts.Data.csproj" />
+  </Folder>
+  <Folder Name="/Producers/">
+    <Project Path="TopKPosts.Likes.Producer/TopKPosts.Likes.Producer.csproj" />
+    <Project Path="TopKPosts.Posts.Producer/TopKPosts.Posts.Producer.csproj" />
+  </Folder>
+  <Folder Name="/Ranking/">
+    <Project Path="TopKPosts.Ranking/TopKPosts.Ranking.csproj" />
+  </Folder>
+  <Folder Name="/UI/">
+    <Project Path="TopKPosts.Web/TopKPosts.Web.csproj" />
+  </Folder>
   <Project Path="TopKPosts.AppHost/TopKPosts.AppHost.csproj" />
-  <Project Path="TopKPosts.Data/TopKPosts.Data.csproj" />
-  <Project Path="TopKPosts.Redis/TopKPosts.Redis.csproj" Id="e8560d9a-405d-4cbf-af8b-2d2d8a9c1591" />
   <Project Path="TopKPosts.ServiceDefaults/TopKPosts.ServiceDefaults.csproj" />
-  <Project Path="TopKPosts.Web/TopKPosts.Web.csproj" />
 </Solution>

@@ -6,22 +6,43 @@ var postgres = builder.AddPostgres("postgres").WithPgAdmin();
 
 var postsDb = postgres.AddDatabase("postsdb");
 
-var apiService = builder.AddProject<Projects.TopKPosts_ApiService>("apiservice")
-    .WithHttpHealthCheck("/health")
-    .WithReference(postsDb)
-    .WithReference(cache)
-    .WaitFor(postsDb)
-    .WaitFor(cache);
+var kafka = builder.AddKafka("kafka")
+                   .WithKafkaUI();
 
 builder.AddProject<Projects.TopKPosts_Web>("webfrontend")
     .WithExternalHttpEndpoints()
     .WithHttpHealthCheck("/health")
     .WithReference(cache)
     .WithReference(postsDb)
-    .WithReference(apiService)
     .WaitFor(cache)
-    .WaitFor(postsDb)
-    .WaitFor(apiService)
-    .WaitFor(apiService);
+    .WaitFor(postsDb);
+
+builder.AddProject<Projects.TopKPosts_Posts_Producer>("topkposts-posts-producer")
+    .WithReference(kafka)
+    .WaitFor(kafka);
+
+builder.AddProject<Projects.TopKPosts_Likes_Producer>("topkposts-likes-producer")
+    .WithReference(kafka)
+    .WithReference(postsDb)
+    .WaitFor(kafka)
+    .WaitFor(postsDb);
+
+builder.AddProject<Projects.TopKPosts_Posts_Consumer>("topkposts-posts-consumer")
+    .WithReference(kafka)
+    .WithReference(postsDb)
+    .WaitFor(kafka)
+    .WaitFor(postsDb);
+
+builder.AddProject<Projects.TopKPosts_Likes_Consumer>("topkposts-likes-consumer")
+    .WithReference(kafka)
+    .WithReference(postsDb)
+    .WaitFor(kafka)
+    .WaitFor(postsDb);
+
+builder.AddProject<Projects.TopKPosts_Ranking>("topkposts-ranking")
+    .WithReference(kafka)
+    .WithReference(cache)
+    .WaitFor(kafka)
+    .WaitFor(cache);
 
 builder.Build().Run();
