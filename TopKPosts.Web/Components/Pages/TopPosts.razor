@@ -9,10 +9,32 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Top 10 Posts by Likes</h1>
         <div class="text-muted">
-            <small>Auto-refreshing every 10 seconds...</small>
+            <small>Auto-refreshing every 2 seconds...</small>
             <span class="badge bg-info ms-2">@lastRefreshTime</span>
         </div>
     </div>
+
+    @if (consistencyPercentage.HasValue)
+    {
+        <div class="row mb-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Cache Consistency</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <h2 class="mb-0 @GetConsistencyColorClass()">@consistencyPercentage.Value.ToString("F1")%</h2>
+                                <small class="text-muted">Cache vs Database (Last 1 day)</small>
+                            </div>
+                            <div class="ms-3">
+                                <i class="@GetConsistencyIcon() fs-1 @GetConsistencyColorClass()"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
     @if (posts == null)
     {
@@ -56,9 +78,10 @@
 
 @code {
     private List<PostWithLikes>? posts;
+    private double? consistencyPercentage;
     private string lastRefreshTime = "Never";
     private System.Threading.Timer? refreshTimer;
-    private readonly TimeSpan refreshInterval = TimeSpan.FromSeconds(10);
+    private readonly TimeSpan refreshInterval = TimeSpan.FromSeconds(2);
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,6 +94,8 @@
         try
         {
             posts = await TopPostsService.GetTopPostsAsync(10);
+            // Update consistency percentage when loading posts
+            consistencyPercentage = await TopPostsService.GetConsistencyPercentageAsync(10, 1);
             lastRefreshTime = DateTime.Now.ToString("HH:mm:ss");
             StateHasChanged();
         }
@@ -79,6 +104,30 @@
             // In a real app, you'd want to log this and show an error message
             Console.WriteLine($"Error loading posts: {ex.Message}");
         }
+    }
+
+    private string GetConsistencyColorClass()
+    {
+        if (!consistencyPercentage.HasValue) return "text-muted";
+
+        return consistencyPercentage.Value switch
+        {
+            >= 80 => "text-success",
+            >= 50 => "text-warning",
+            _ => "text-danger"
+        };
+    }
+
+    private string GetConsistencyIcon()
+    {
+        if (!consistencyPercentage.HasValue) return "bi bi-question-circle";
+
+        return consistencyPercentage.Value switch
+        {
+            >= 80 => "bi bi-check-circle-fill",
+            >= 50 => "bi bi-exclamation-triangle-fill",
+            _ => "bi bi-x-circle-fill"
+        };
     }
 
     private void StartAutoRefresh()

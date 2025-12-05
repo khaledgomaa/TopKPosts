@@ -26,7 +26,7 @@ public class PostsProducer(IProducer<string, string> producer) : BackgroundServi
 
             producer.Flush(stoppingToken);
 
-            await Task.Delay(TimeSpan.FromMilliseconds(100), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
     }
 }

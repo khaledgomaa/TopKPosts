@@ -15,7 +15,7 @@ namespace TopKPosts.Ranking
         {
             _consumer.Subscribe("likes-topic");
 
-            Console.WriteLine($"LikesConsumer subscribes to {string.Join(",", _consumer.Subscription)}");
+            Console.WriteLine($"LikesConsumer subscribes to {string.Join(",", _consumer.ConsumerGroupMetadata)}");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -24,7 +24,7 @@ namespace TopKPosts.Ranking
                     var consumeResult = _consumer.Consume(stoppingToken);
                     if (consumeResult != null)
                     {
-                        Console.WriteLine($"Consumed message '{consumeResult.Message.Value}' at: '{consumeResult.TopicPartitionOffset}'.");
+                        Console.WriteLine($"Consumed message '{consumeResult.Message.Value}' at: '{consumeResult.TopicPartition.Partition}'.");
 
                         var like = JsonSerializer.Deserialize<Like>(consumeResult.Message.Value);
 
@@ -36,10 +36,6 @@ namespace TopKPosts.Ranking
                 catch (ConsumeException e)
                 {
                     Console.WriteLine($"Consume error: {e.Error.Reason}");
-                }
-                finally
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(50), stoppingToken);
                 }
             }
         }

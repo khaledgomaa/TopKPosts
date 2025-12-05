@@ -15,6 +15,7 @@ builder.AddKafkaConsumer<string, string>("kafka", configure =>
 {
     configure.Config.GroupId = "ranking-consumer-group-id";
     configure.Config.AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Earliest;
+    configure.Config.EnableAutoCommit = true;
 });
 
 builder.Services.AddHostedService<RankingWorker>();

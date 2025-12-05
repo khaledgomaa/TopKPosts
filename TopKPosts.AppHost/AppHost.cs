@@ -9,6 +9,31 @@ var postsDb = postgres.AddDatabase("postsdb");
 var kafka = builder.AddKafka("kafka")
                    .WithKafkaUI();
 
+//builder.Eventing.Subscribe<ResourceReadyEvent>(kafka.Resource, async (@event, ct) =>
+//{
+//    var cs = await kafka.Resource.ConnectionStringExpression.GetValueAsync(ct);
+
+//    var config = new AdminClientConfig
+//    {
+//        BootstrapServers = cs
+//    };
+
+//    using var adminClient = new AdminClientBuilder(config).Build();
+//    try
+//    {
+//        await adminClient.CreateTopicsAsync(
+//        [
+//                new TopicSpecification { Name = "likes-topic", NumPartitions = 2, ReplicationFactor = 1 },
+//                new TopicSpecification { Name = "posts-topic", NumPartitions = 1, ReplicationFactor = 1 }
+//        ]);
+//    }
+//    catch (CreateTopicsException e)
+//    {
+//        Console.WriteLine($"An error occurred creating topic: {e.Message}");
+//        throw;
+//    }
+//});
+
 builder.AddProject<Projects.TopKPosts_Web>("webfrontend")
     .WithExternalHttpEndpoints()
     .WithHttpHealthCheck("/health")

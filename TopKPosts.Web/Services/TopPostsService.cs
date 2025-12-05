@@ -51,6 +51,44 @@ public class TopPostsService(IRedisCacheService redisCacheService, IDbContextFac
 
         return result;
     }
+
+    public async Task<double> GetConsistencyPercentageAsync(int count = 10, int daysBack = 1)
+    {
+        // Get top post IDs from Redis cache
+        var topPostsFromRedis = await redisCacheService.GetTopPostsAsync(count);
+        var cachePostIds = topPostsFromRedis
+            .Select(x => x.PostId)
+            .ToHashSet();
+
+        if (cachePostIds.Count == 0)
+        {
+            return 100;
+        }
+
+        // Get top posts from database based on likes count for recent posts
+        var cutoffDate = DateTime.UtcNow.AddDays(-daysBack);
+
+        await using var dbContext = await dbContextFactory.CreateDbContextAsync();
+        var topPostsFromDb = await dbContext.Posts
+            .Where(p => p.CreatedAt >= cutoffDate)
+            .Select(p => new
+            {
+                p.Id,
+                LikeCount = p.Likes.Count
+            })
+            .OrderByDescending(p => p.LikeCount)
+            .Take(count)
+            .Select(p => p.Id)
+            .ToListAsync();
+
+        var dbPostIds = topPostsFromDb.ToHashSet();
+
+        // Calculate percentage: how many cache post IDs are present in database results
+        var matchingCount = cachePostIds.Count(cacheId => dbPostIds.Contains(cacheId));
+        var percentage = (double)matchingCount / cachePostIds.Count * 100.0;
+
+        return percentage;
+    }
 }
 
 public class PostWithLikes

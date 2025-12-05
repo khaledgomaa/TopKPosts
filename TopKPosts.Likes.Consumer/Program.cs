@@ -23,6 +23,7 @@ builder.AddKafkaConsumer<string, string>("kafka", configure =>
 {
     configure.Config.GroupId = "likes-consumer-group-id";
     configure.Config.AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Latest;
+    configure.Config.EnableAutoCommit = true;
 });
 
 var app = builder.Build();
