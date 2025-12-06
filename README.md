@@ -1,6 +1,6 @@
 # TopKPosts — Real-time Top-K Posts
 
-This repository contains a **Top K Posts** service, designed and evolved using a **sliced, incremental architecture** approach. The goal is to show how to start with the simplest thing that works, then gradually introduce more components only when needed.
+This repository uses .Net Aspire to build distributed system **Top K Posts** service, designed and evolved using a **sliced, incremental architecture** approach. The goal is to show how to start with the simplest thing that works, then gradually introduce more components only when needed.
 
 ---
 
@@ -179,26 +179,6 @@ flowchart LR
   LikesConsumer --> RankingWorker
   RankingWorker --> Redis
   API --> Redis
-```
-
-3) Component Diagram (level 3) — Ranking Worker
-
-Break down the `TopKPosts.Ranking` worker showing core components.
-
-```mermaid
-classDiagram
-  class RankingWorker{
-    +Main()
-    +ConsumeLikeEvent(event)
-    +ApplyRankingUpdate(postId)
-  }
-  class EventDeserializer
-  class Aggregator
-  class RedisCacheService
-  RankingWorker --|> EventDeserializer
-  RankingWorker --> Aggregator : uses
-  RankingWorker --> RedisCacheService : updates sorted set
-```
 ```
 
 Next steps and extensions
