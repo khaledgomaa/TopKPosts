@@ -199,20 +199,6 @@ classDiagram
   RankingWorker --> Aggregator : uses
   RankingWorker --> RedisCacheService : updates sorted set
 ```
-
-PlantUML (optional, C4 DSL) — if you prefer PlantUML and the C4 extension, here's an equivalent snippet you can render with PlantUML + C4 plugin:
-
-```text
-'@startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
-Person(user, "User", "Uses the web UI")
-System(system, "TopKPosts", "Computes & serves Top-K posts")
-System_Ext(kafka, "Kafka", "Event streaming")
-System_Ext(redis, "Redis", "Ranking cache (sorted sets)")
-Rel(user, system, "views Top-K via web UI")
-Rel(system, redis, "reads/writes Top-K")
-Rel(system, kafka, "consumes events")
-@enduml
 ```
 
 Next steps and extensions
