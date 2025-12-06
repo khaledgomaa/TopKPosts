@@ -4,6 +4,27 @@ This repository contains an open-source MVP for a **Top K Posts** service, desig
 
 ---
 
+## 🚀 How to Run the Project
+
+This project requires the latest tooling to support modern .NET and containerized development.
+
+### 📦 Prerequisites
+
+Make sure you have the following installed:
+
+- **.NET 10 SDK** (required to build and run the services)
+- **Docker** (required for running infrastructure components such as Redis, SQL Server, and message brokers)
+- **IDE / Editors**  
+  - **Visual Studio** (latest version with .NET 10 support), or  
+  - **Visual Studio Code** with the C# Dev Kit extension
+
+You can verify your .NET installation with:
+
+```bash
+dotnet --version
+```
+---
+
 ## Slice 1 – Simple Polling Over a Single Database
 
 <img width="977" height="505" alt="image" src="https://github.com/user-attachments/assets/a8b1d1e0-d10c-4085-8cd3-1459ac767332" />
