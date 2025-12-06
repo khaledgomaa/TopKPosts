@@ -224,5 +224,3 @@ If you'd like, I can:
 Credits
 - Project scaffolded as a collection of simple .NET services demonstrating a streaming Top‑K pattern.
 
----
-Generated on: December 6, 2025
