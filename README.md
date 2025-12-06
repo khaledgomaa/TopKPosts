@@ -1,6 +1,59 @@
 # TopKPosts — Real-time Top-K Posts
 
-This repository implements a small streaming system that computes and serves the Top‑K posts by likes in (near) real time. The system is implemented as a set of small .NET services that use message streams, background workers and an in‑memory cache to keep a fast, consistent view of the most popular posts.
+This repository contains an open-source MVP for a **Top K Posts** service, designed and evolved using a **sliced, incremental architecture** approach. The goal is to show how to start with the simplest thing that works, then gradually introduce more components only when needed.
+
+---
+
+## Slice 1 – Simple Polling Over a Single Database
+
+<img width="977" height="505" alt="image" src="https://github.com/user-attachments/assets/a8b1d1e0-d10c-4085-8cd3-1459ac767332" />
+
+The first slice is a straightforward setup:  
+The client polls an application service for the top **N** posts, and the service reads directly from a relational database that stores posts and likes. Background workers update likes and posts in the same database.
+
+### Pros
+- Easiest to reason about and implement.  
+- Minimal moving parts and operational overhead.
+
+### Cons
+- Read and write traffic compete on the same database.  
+- Limited scalability when traffic or ranking complexity grows.
+
+---
+
+## Slice 2 – Adding Cache and Async Processing
+
+<img width="1109" height="497" alt="image" src="https://github.com/user-attachments/assets/3175bb21-dd80-4841-be70-3585ef979fa9" />
+
+The second slice introduces a **cache (Redis)** in front of the application service and background workers for posts and likes.  
+The app still exposes a polling endpoint for top **N** posts, but now hot data is served from cache, while workers keep the cache in sync with the database.
+
+### Pros
+- Faster reads for top posts and reduced DB load.  
+- Still relatively simple, while supporting higher traffic.
+
+### Cons
+- Cache invalidation and consistency become concerns.  
+- More components to deploy, monitor, and debug.
+
+---
+
+## Slice 3 – Event-Driven Ranking and Consumers
+
+<img width="1316" height="688" alt="image" src="https://github.com/user-attachments/assets/1b4d79df-ecb7-4753-ad48-a00e946c9382" />
+
+The third slice evolves into an event-driven architecture:  
+Producers emit likes and posts events into a message broker; dedicated consumers and a ranking service process these events and update the cache.  
+The application service continues to serve top **N** posts via polling, now backed by a ranking-aware cache.
+
+### Pros
+- Better scalability and decoupling between write path, ranking logic, and read path.  
+- Easier to extend ranking algorithms and add new consumers without impacting the core API.
+
+### Cons
+- Higher complexity in deployment, operations, and failure handling.  
+- Requires deeper observability and careful schema/version management for events.
+
 
 This README explains the problem, the overall architecture and shows C4-style models (Context / Container / Component) to help developers and architects understand, extend and operate the system.
 
