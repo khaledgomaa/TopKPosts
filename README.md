@@ -1,6 +1,6 @@
 # TopKPosts — Real-time Top-K Posts
 
-This repository contains an open-source MVP for a **Top K Posts** service, designed and evolved using a **sliced, incremental architecture** approach. The goal is to show how to start with the simplest thing that works, then gradually introduce more components only when needed.
+This repository contains a **Top K Posts** service, designed and evolved using a **sliced, incremental architecture** approach. The goal is to show how to start with the simplest thing that works, then gradually introduce more components only when needed.
 
 ---
 
@@ -13,7 +13,7 @@ This project requires the latest tooling to support modern .NET and containerize
 Make sure you have the following installed:
 
 - **.NET 10 SDK** (required to build and run the services)
-- **Docker** (required for running infrastructure components such as Redis, SQL Server, and message brokers)
+- **Docker** (required for running infrastructure components such as Redis, Postgres, and message brokers)
 - **IDE / Editors**  
   - **Visual Studio** (latest version with .NET 10 support), or  
   - **Visual Studio Code** with the C# Dev Kit extension
@@ -102,12 +102,11 @@ Repository mapping
 - `TopKPosts.ServiceDefaults` / `TopKPosts.AppHost` — shared configuration and hosting helpers
 
 Key data flows
-- Topic `posts` — Post created/updated events (id, author, timestamp, ...)
-- Topic `likes` — Like events (postId, userId, timestamp)
-- Ranking worker consumes `likes` (and optionally `posts`) and performs:
+- Topic `posts` — Post created/updated events (id, content, timestamp, ...)
+- Topic `likes` — Like events (id, postId, timestamp)
+- Ranking worker consumes `likes` and performs:
   - increment post like counter
   - update sorted set for ranking (Redis ZINCRBY / ZADD)
-  - persist counters if needed (optional durable store)
 
 Serving Top‑K
 - API reads the Top‑K from Redis sorted set (ZREVRANGE) which returns top items with O(log(N)+K) performance.
@@ -216,32 +215,5 @@ Rel(system, kafka, "consumes events")
 @enduml
 ```
 
-Operational guidance
-- Local dev: you can run lightweight Kafka (e.g., `docker-compose` using `confluentinc/cp-kafka`) and `redis:latest`.
-- Seed posts and likes using the producers in `TopKPosts.Posts.Producer` and `TopKPosts.Likes.Producer`.
-- Start the `TopKPosts.Ranking` worker and then query the API (`TopKPosts.ApiService`) to see Top‑K results.
-
-Example commands (PowerShell):
-
-```powershell
-# Start redis (docker)
-docker run -p 6379:6379 -d redis:latest
-
-# Build & run the ranking worker (from repo root)
-dotnet build TopKPosts.Ranking/TopKPosts.Ranking.csproj
-dotnet run --project TopKPosts.Ranking/TopKPosts.Ranking.csproj
-```
-
 Next steps and extensions
-- Add durable storage of counts for recovery (Postgres / Cosmos DB) if long‑term accuracy is required.
-- Add per‑tenant ranking and multi-region replication.
 - Add monitoring around Kafka lag, Redis memory, and worker throughput.
-
-If you'd like, I can:
-- add rendered SVG diagrams to `/docs/diagrams` (PlantUML or Mermaid),
-- add a `docker-compose` file to run Kafka + Redis + sample producers locally,
-- or generate sequence diagrams for event processing.
-
-Credits
-- Project scaffolded as a collection of simple .NET services demonstrating a streaming Top‑K pattern.
-
