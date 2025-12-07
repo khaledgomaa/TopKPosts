@@ -4,6 +4,12 @@ This repository uses .Net Aspire to build distributed system **Top K Posts** ser
 
 ---
 
+# Demo
+
+<img width="1917" height="910" alt="image" src="https://github.com/user-attachments/assets/7ce9d4d7-2113-4c82-897f-29db6493685c" />
+
+---
+
 ## 🚀 How to Run the Project
 
 This project requires the latest tooling to support modern .NET and containerized development.
