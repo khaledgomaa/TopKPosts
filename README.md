@@ -8,6 +8,10 @@ This repository uses .Net Aspire to build distributed system **Top K Posts** ser
 
 <img width="1917" height="910" alt="image" src="https://github.com/user-attachments/assets/7ce9d4d7-2113-4c82-897f-29db6493685c" />
 
+<img width="1917" height="917" alt="image" src="https://github.com/user-attachments/assets/f20e3a5b-462c-4cda-a23e-3efd603deebe" />
+
+<img width="1898" height="909" alt="image" src="https://github.com/user-attachments/assets/1f66f629-b92d-4f11-8774-54ec519ea573" />
+
 ---
 
 ## 🚀 How to Run the Project
