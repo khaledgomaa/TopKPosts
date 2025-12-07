@@ -60,8 +60,7 @@ The app still exposes a polling endpoint for top **N** posts, but now hot data i
 - Still relatively simple, while supporting higher traffic.
 
 ### Cons
-- Cache invalidation and consistency become concerns.  
-- More components to deploy, monitor, and debug.
+- Still write traffic compete on the same database.
 
 ---
 
