@@ -131,8 +131,6 @@ C4 Models (text + renderable diagrams)
 
 This shows the TopKPosts system and its primary users / external systems.
 
-Mermaid diagram (paste into a Mermaid renderer or use VS Code Mermaid preview):
-
 ```mermaid
 graph TD
   User["User (Web / Mobile)"]
